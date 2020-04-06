@@ -6,6 +6,8 @@ import { Query,Mutation,useMutation } from 'react-apollo'
 import {gql} from 'apollo-boost'
 
 
+import Dashboard from './pages/dashboard/dashboard'
+
 
 function App() {
 
@@ -35,7 +37,7 @@ const [clear]=useMutation(CLEAR_STATS)
 
   return (
   
-<React.Fragment>
+<React.Fragment >
 
 
 <Query query={GET_STATS}>
@@ -43,31 +45,27 @@ const [clear]=useMutation(CLEAR_STATS)
 
 {({data})=>{
 
-console.log(data)
+ console.log(data)
 
 
-return ( !data?
-  (<p>loading...</p>):
-( <h1>
-   total :  {data.totalStats[0].total} <br/>
-  discharged / migrated :  {data.totalStats[0].discharged}<br/>
-  death :  {data.totalStats[0].death}<br/>
-  Active Cases :  {(parseInt(data.totalStats[0].total))-(data.totalStats[0].discharged)-(data.totalStats[0].death) } 
-</h1>
-)
-)
-}}
+return ( !data? 
+    (<p>loading...</p>): 
+ (
+<div style={{overflow: 'hidden',width:'100vw'}}>
+<Dashboard
+ total={data.totalStats[0].total}
+ death={data.totalStats[0].death}
+ discharged={data.totalStats[0].discharged}
+ />
+</div>
+    ) 
 
-</Query>
+ )
+ }} 
 
-<button onClick={
-  ()=>{
-  clear()
-.then(data=>console.log(data))
-}
-}>
-  clear
-</button>
+ </Query> 
+
+
 
 
 </React.Fragment>
